@@ -1,26 +1,26 @@
- /* Element selector */
- h1,#hobbies{
-    color: orange;
-    background-color: palevioletred;
-  }
+/* Element selector */
+h1,#hobbies{
+color: orange;
+background-color: palevioletred;
+}
 
-  /* ID Selector */
-  #hobbies {
-    border: 4px solid lightblue;
-  }
+/* ID Selector */
+#hobbies {
+border: 4px solid lightblue;
+}
 
-  /* Child Selector :Apply to all li elements that are children of #hobbies (any element with that ID) */
-  #hobbies li {
-    background: lightblue;
-  }
+/* Child Selector :Apply to all li elements that are children of #hobbies (any element with that ID) */
+#hobbies li {
+background: lightblue;
+}
 
 
-  /* Pseudo Selector */
-  li:hover, #hobbies li:hover {
-    background: lightgreen;
-  }
+/* Pseudo Selector */
+li:hover, #hobbies li:hover {
+background: lightgreen;
+}
 
-  /* Class Selector */
-  .big {
-    font-size: 2em;
-  }
+/* Class Selector */
+.big {
+font-size: 2em;
+}
