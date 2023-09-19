@@ -1,0 +1,18 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+nav a:nth-child(even) {
+    background-color: grey;
+
+}
+
+span span span{
+    background-color: red;
+}
+
+p:nth-last-child(even){
+    padding-top: 20%;
+}
