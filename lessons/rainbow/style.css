@@ -6,36 +6,32 @@
 
 #one {
 border-radius: 50%;
-width: 500px;
-height: 500px;
+width: 600px;
+height: 600px;
 background-color: orange;
-margin: 100px 100px;
-position: relative;
-border: 3rem solid;
+position: absolute;
+border: 50px solid;
 border-color: red;
 }
 
 .two {
     border-radius: 50%;
-    width: 300px;
-    height: 300px;
+    width: 400px;
+    height: 400px;
     background-color: green;
     position: absolute;
-    border: 2.5em solid;
+    border: 50px solid;
     border-color: yellow;
-    top: 195px;
-    left: 195px;
+    margin: 100px;
     }
 
     .three {
     border-radius: 50%;
-    width: 150px;
-    height: 150px;
+    width: 200px;
+    height: 200px;
     background-color: rebeccapurple;
-    margin: auto;
+    margin: 200px;
     position: absolute;
-    border: 2rem solid;
+    border: 50px solid;
     border-color: royalblue;
-    top: 270px;
-    left: 270px;
-}
+    }
