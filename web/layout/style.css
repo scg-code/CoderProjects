@@ -1,0 +1,22 @@
+h1, p {
+    background-color: #dde0e3;
+}
+
+h1 {
+    padding: 4rem;
+}
+
+p {
+    padding: 10vw 20vw;
+    /* padding-top: 2rem;
+    padding-bottom: 2rem;
+    padding-left: 1rem;
+    padding-right: 1rem; */
+}
+
+
+em, strong {
+    /* display: block; */
+    background-color: #b2d6ff;
+}
+
