@@ -1,0 +1,34 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+div {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin: 1rem;
+    background: red;
+}
+/* Select the 2nd child of the body if it is a div */
+/* div :nth-child(2) { */
+    /* background: blue; */
+
+/* select the 2nd child of the body regardless of what it is  */
+/* body :nth-child(2) { */
+    /* background: blue; */
+
+
+div:nth-of-type(2) {
+    position: fixed;
+    background-color:  blue;
+    top: 100px;
+    left: 150px;
+    z-index: 1;
+}
+
+div:nth-of-type(3) {
+    background-color:  green;
+}
