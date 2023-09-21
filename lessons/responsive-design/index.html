@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset=utf-8>
+  <title>CoderAcademy</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">  
+    <style>
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        .article {
+          width: 70vw;
+          height: 500px;
+          background: salmon;
+          display: inline-block;
+          border-radius: 15px;
+        }
+        .sidebar {
+          width: 25vw;
+          height: 500px;
+          background: lightblue;
+          display: inline-block;
+          border-radius: 15px;
+        }
+        @media screen and (max-width: 600px) {
+          .sidebar { 
+            display: none;
+
+          }
+          .article {
+            width: 100%;
+        }
+
+        /* larger screen */
+
+        @media screen and (min-width: 1000px;){
+            .sidebar {
+                width: 15%;
+            }
+            .article {
+                width: 80%;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="sidebar"></div>
+    <div class="article"></div>
+
+</body>
+</html>
