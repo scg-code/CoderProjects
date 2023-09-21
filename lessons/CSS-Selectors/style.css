@@ -13,6 +13,6 @@ span span span{
     background-color: red;
 }
 
-p:nth-last-child(even){
+body > p:last-child{
     padding-top: 20%;
 }
