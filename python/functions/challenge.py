@@ -19,23 +19,49 @@
 
 
 
+# def calc_frame(ball1, ball2, ball3):
+#     # First, let's calculate the total score for this frame.
+#     frame_score = ball1 + ball2 + ball3
+
+#     # If it's a strike (all pins knocked down with the first ball),
+#     if ball1 == 10:
+#         # Add the total of the next two balls to the frame_score.
+#         frame_score += ball2 + ball3
+#     # If it's not a strike but a spare (all pins knocked down with the first two balls),
+#     elif ball1 + ball2 == 10:
+#         # Add the next ball's score to the frame_score.
+#         frame_score += ball3
+
+#     # Return the total score for this frame.
+#     return frame_score
+
+# # Example calls with output:
+# print(calc_frame(6, 2, 9))   # Output: 8
+# print(calc_frame(10, 6, 2))  # Output: 18
+# print(calc_frame(7, 3, 4))   # Output: 14
+# print(calc_frame(0, 10, 5))  # Output: 15
+# print(calc_frame(5, 0, 10))  # Output: 5
+
+
+
+
+
+
 def calc_frame(ball1, ball2, ball3):
-    # First, let's calculate the total score for this frame.
-    frame_score = ball1 + ball2 + ball3
+    # if strike, return 10 + next 2 balls
+    # else if spare, return 10 + next ball
+    # else return sum of first two balls
+    if ball1 == 10 or ball1 + ball2 == 10: #Strike or spare
+        return ball1 + ball2 + ball3
+    # elif ball1 + ball2 == 10: # Spare
+    #     return 10 + ball3
+    else:
+        return ball1 + ball2
 
-    # If it's a strike (all pins knocked down with the first ball),
-    if ball1 == 10:
-        # Add the total of the next two balls to the frame_score.
-        frame_score += ball2 + ball3
-    # If it's not a strike but a spare (all pins knocked down with the first two balls),
-    elif ball1 + ball2 == 10:
-        # Add the next ball's score to the frame_score.
-        frame_score += ball3
 
-    # Return the total score for this frame.
-    return frame_score
 
-# Example calls with output:
+
+# Main 
 print(calc_frame(6, 2, 9))   # Output: 8
 print(calc_frame(10, 6, 2))  # Output: 18
 print(calc_frame(7, 3, 4))   # Output: 14
