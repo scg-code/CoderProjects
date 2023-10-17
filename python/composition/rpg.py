@@ -1,8 +1,44 @@
 class Character:
-    def __init__(self, name, race):
+    def __init__(self, name, race, health, attack):
         self.name = name
         self.race = race
+        self.health = health
+        self.attack = attack
         self.inv = Inventory([], 0, 0, 0 )
+
+
+    def battle(self, other):
+        print(f'{self.name} attacks {other.name}!')
+
+class Ranger(Character):
+    def battle(self, other):
+        print(f'{self.name} launches fist smash on {other.name}!')
+
+    def recruit_undead(self):
+         pass
+            
+class Mage(Character):
+    def __init__(self, name, race, health, attack):
+       # Call the superclass constructor
+        super().__init__(name, race, health, attack)
+        self.mana = 100
+        
+    
+    def battle(self, other):
+        print(f'{self.name} casts a lightning strike at {other.name}!')
+        self.mana -= 20
+
+
+class Burglar(Character):
+    def battle(self, other):
+        print(f'{self.name} sneaks in a stealth attack on {other.name}!')
+
+
+class Wizard(Character):
+    def battle(self, other):
+        print(f'{self.name} summons an orc minion, which attacks {other.name}!')
+
+
     
 
 
