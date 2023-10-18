@@ -12,14 +12,14 @@ try:
 
     print(q)
 
-# except ZeroDivisionError:
-#   print("Denominator cannot be zero")
+except ZeroDivisionError:
+  print("Denominator cannot be zero")
 
-# except ValueError:
-#    print("inputs must be integers")
+except ValueError:
+   print("inputs must be integers")
 
-# except NegativeNumberError:
-#    print("inputs cannot be negative numbers")
+except NegativeNumberError:
+   print("inputs cannot be negative numbers")
 
 except Exception as e:
    print(e)
