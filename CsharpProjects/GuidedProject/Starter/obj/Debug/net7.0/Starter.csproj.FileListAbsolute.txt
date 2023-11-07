@@ -1,0 +1,14 @@
+/Users/samuelgifford/projects/CsharpProjects/GuidedProject/Starter/bin/Debug/net7.0/Starter
+/Users/samuelgifford/projects/CsharpProjects/GuidedProject/Starter/bin/Debug/net7.0/Starter.deps.json
+/Users/samuelgifford/projects/CsharpProjects/GuidedProject/Starter/bin/Debug/net7.0/Starter.runtimeconfig.json
+/Users/samuelgifford/projects/CsharpProjects/GuidedProject/Starter/bin/Debug/net7.0/Starter.dll
+/Users/samuelgifford/projects/CsharpProjects/GuidedProject/Starter/bin/Debug/net7.0/Starter.pdb
+/Users/samuelgifford/projects/CsharpProjects/GuidedProject/Starter/obj/Debug/net7.0/Starter.GeneratedMSBuildEditorConfig.editorconfig
+/Users/samuelgifford/projects/CsharpProjects/GuidedProject/Starter/obj/Debug/net7.0/Starter.AssemblyInfoInputs.cache
+/Users/samuelgifford/projects/CsharpProjects/GuidedProject/Starter/obj/Debug/net7.0/Starter.AssemblyInfo.cs
+/Users/samuelgifford/projects/CsharpProjects/GuidedProject/Starter/obj/Debug/net7.0/Starter.csproj.CoreCompileInputs.cache
+/Users/samuelgifford/projects/CsharpProjects/GuidedProject/Starter/obj/Debug/net7.0/Starter.dll
+/Users/samuelgifford/projects/CsharpProjects/GuidedProject/Starter/obj/Debug/net7.0/refint/Starter.dll
+/Users/samuelgifford/projects/CsharpProjects/GuidedProject/Starter/obj/Debug/net7.0/Starter.pdb
+/Users/samuelgifford/projects/CsharpProjects/GuidedProject/Starter/obj/Debug/net7.0/Starter.genruntimeconfig.cache
+/Users/samuelgifford/projects/CsharpProjects/GuidedProject/Starter/obj/Debug/net7.0/ref/Starter.dll
