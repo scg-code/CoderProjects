@@ -3,15 +3,20 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import date
 from flask_marshmallow import Marshmallow
 from flask_bcrypt import Bcrypt
-
+from sqlalchemy.exc import IntegrityError
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required
+from datetime import timedelta
 
 app = Flask(__name__)
+
+app.config['JWT_SECRET_KEY'] = 'George Orwell'
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://trello_dev:password123@127.0.0.1:5432/trello'   #database connection string
 
 db = SQLAlchemy(app)  # alchemy instance
 ma = Marshmallow(app) # marshmallow instance
 bcrypt = Bcrypt(app) # bcrypt instance
+jwt = JWTManager(app) # jwt instance
 
 class Card(db.Model):   # define card class, extends db.Model
     __tablename__ = "cards"  # set table name
@@ -94,25 +99,47 @@ def db_seed():
 
 @app.route('/users/register', methods=['POST'])
 def register():
-    # parse incoming POST body through the schema
-    user_info = UserSchema(exclude=['id']).load(request.json)
-    # Create a new user with the parsed data
-    user = User(
-        email=user_info['email'],
-        password=bcrypt.generate_password_hash(user_info['password']).decode('utf8'),
-        name=user_info.get('name', '')
-    )
+    try:
+        # parse incoming POST body through the schema
+        user_info = UserSchema(exclude=['id']).load(request.json)
+        # Create a new user with the parsed data
+        user = User(
+            email=user_info['email'],
+            password=bcrypt.generate_password_hash(user_info['password']).decode('utf8'),
+            name=user_info.get('name', '')
+        )
 
-    # add and commit new user to the database
-    db.session.add(user)
-    db.session.commit()
+        # add and commit new user to the database
+        db.session.add(user)
+        db.session.commit()
 
-    # return the new user
-    return UserSchema(exclude=['password']).dump(user), 201
+        # return the new user
+        return UserSchema(exclude=['password']).dump(user), 201
+    except IntegrityError:
+        return {'error': 'Email address already in use'}, 409
 
+
+@app.route('/users/login', methods=['POST'])
+def login():
+    # 1. Parse incoming POST body through the schema
+    user_info = UserSchema(exclude=['id', 'name', 'is_admin']).load(request.json)
+    # 2. Select user with email that matches the one in the POST body
+    stmt = db.select(User).where(User.email == user_info['email'])
+    user = db.session.scalar(stmt)
+    # 3. Check password hash
+    if user and bcrypt.check_password_hash(user.password, user_info['password']):
+        # 4. Create a JWT token
+        token = create_access_token(identity=user.email, expires_delta=timedelta(hours=2))
+        # 5. Return the token
+        return {'token': token, 'user': UserSchema(exclude=['password']).dump(user)}
+    else:
+        return {'error': 'Invalid email or password'}, 401
+    
+    return 'ok'
 
 
 @app.route('/cards')
+@jwt_required()
 def all_cards():
     # selct * from cards;
     stmt = db.select(Card).where(db.or_(Card.status != 'Done', Card.id > 2)).order_by(Card.title.desc())
@@ -127,3 +154,7 @@ def all_cards():
 @app.route('/')
 def index():
     return 'Hello World'
+
+# @app.errorhandler(IntegrityError)
+# def integrity_error(err):
+#     return {'error': str(err)}, 409
