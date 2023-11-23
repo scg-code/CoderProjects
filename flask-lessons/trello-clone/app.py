@@ -1,15 +1,17 @@
-from flask import Flask, request
+from flask import Flask, request, abort
 from flask_sqlalchemy import SQLAlchemy
 from datetime import date
 from flask_marshmallow import Marshmallow
 from flask_bcrypt import Bcrypt
 from sqlalchemy.exc import IntegrityError
-from flask_jwt_extended import JWTManager, create_access_token, jwt_required
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from datetime import timedelta
+from os import environ
+
 
 app = Flask(__name__)
 
-app.config['JWT_SECRET_KEY'] = 'George Orwell'
+app.config['JWT_SECRET_KEY'] = environ.get('JWT_KEY')
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://trello_dev:password123@127.0.0.1:5432/trello'   #database connection string
 
@@ -17,6 +19,18 @@ db = SQLAlchemy(app)  # alchemy instance
 ma = Marshmallow(app) # marshmallow instance
 bcrypt = Bcrypt(app) # bcrypt instance
 jwt = JWTManager(app) # jwt instance
+
+def admin_required():
+    user_email = get_jwt_identity()
+    stmt = db.select(User).where(User.email == user_email)
+    user = db.session.scalar(stmt)
+    if not (user and user.is_admin):
+        abort(401)
+
+@app.errorhandler(401)
+def unauthorized(err):
+    return {'error': 'You are not authorized to access this resource'}
+
 
 class Card(db.Model):   # define card class, extends db.Model
     __tablename__ = "cards"  # set table name
@@ -101,7 +115,7 @@ def db_seed():
 def register():
     try:
         # parse incoming POST body through the schema
-        user_info = UserSchema(exclude=['id']).load(request.json)
+        user_info = UserSchema(exclude=['id', 'is_admin']).load(request.json)
         # Create a new user with the parsed data
         user = User(
             email=user_info['email'],
@@ -134,27 +148,18 @@ def login():
         return {'token': token, 'user': UserSchema(exclude=['password']).dump(user)}
     else:
         return {'error': 'Invalid email or password'}, 401
-    
-    return 'ok'
 
 
 @app.route('/cards')
 @jwt_required()
 def all_cards():
+    admin_required()
     # selct * from cards;
-    stmt = db.select(Card).where(db.or_(Card.status != 'Done', Card.id > 2)).order_by(Card.title.desc())
+    stmt = db.select(Card)    #.where(db.or_(Card.status != 'Done', Card.id > 2)).order_by(Card.title.desc())
     cards = db.session.scalars(stmt).all()
     return CardSchema(many=True).dump(cards)
-    # print(list(cards))
-    # # print(cards.all())
-    # for card in cards:
-    #     print(card.__dict__)
 
 
 @app.route('/')
 def index():
     return 'Hello World'
-
-# @app.errorhandler(IntegrityError)
-# def integrity_error(err):
-#     return {'error': str(err)}, 409

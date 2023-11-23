@@ -1,0 +1,3 @@
+FLASK_RUN_PORT= # Flask server port
+FLASK_DEBUG= # Set TRUE for debug mode
+JWT_KEY= # JWT signature key
