@@ -5,6 +5,7 @@ from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
 from os import environ
 
+
 app = Flask(__name__)
 
 app.config['JWT_SECRET_KEY'] = environ.get('JWT_KEY')
@@ -15,3 +16,7 @@ db = SQLAlchemy(app)  # alchemy instance
 ma = Marshmallow(app) # marshmallow instance
 bcrypt = Bcrypt(app) # bcrypt instance
 jwt = JWTManager(app) # jwt instance
+
+@app.errorhandler(401)
+def unauthorized(err):
+    return {'error': 'You are not authorized to access this resource'}
