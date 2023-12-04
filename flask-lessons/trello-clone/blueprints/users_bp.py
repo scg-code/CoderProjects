@@ -4,14 +4,16 @@ from setup import bcrypt, db
 from sqlalchemy.exc import IntegrityError
 from flask_jwt_extended import create_access_token, jwt_required
 from datetime import timedelta
-from auth import admin_required
+from auth import authorize
 
 
-users_bp = Blueprint('users', __name__, url_prefix='/users')
+users_bp = Blueprint("users", __name__, url_prefix="/users")
 
 
 @users_bp.route("/register", methods=["POST"])
+@jwt_required()
 def register():
+    authorize() # Admin only
     try:
         # Parse incoming POST body through the schema
         user_info = UserSchema(exclude=["id", "is_admin"]).load(request.json)
@@ -46,7 +48,10 @@ def login():
         # 4. Create a JWT token
         token = create_access_token(identity=user.id, expires_delta=timedelta(hours=2))
         # 5. Return the token
-        return {'token': token, 'user': UserSchema(exclude=["password", 'cards']).dump(user)}
+        return {
+            "token": token,
+            "user": UserSchema(exclude=["password", "cards"]).dump(user),
+        }
     else:
         return {"error": "Invalid email or password"}, 401
 
@@ -54,8 +59,8 @@ def login():
 @users_bp.route("/")
 @jwt_required()
 def all_users():
-    admin_required()
+    authorize() # Admin only
     stmt = db.select(User)
     users = db.session.scalars(stmt).all()
     print(users[0].cards)
-    return UserSchema(many=True, exclude=['password']).dump(users)
+    return UserSchema(many=True, exclude=["password"]).dump(users)

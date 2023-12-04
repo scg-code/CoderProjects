@@ -9,7 +9,6 @@ class Comment(db.Model):
 
     message = db.Column(db.Text, nullable=False)
 
-
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     user = db.relationship('User', back_populates='comments')
 
@@ -19,7 +18,7 @@ class Comment(db.Model):
 
 class CommentSchema(ma.Schema):
     # Tell Marshmallow to nest a UserSchema instance when serializing
-    user = fields.Nested('UserSchema', only=['id','name'])
+    user = fields.Nested('UserSchema', only=['id', 'name'])
     card = fields.Nested('CardSchema', only=['id', 'title'])
 
     class Meta:
