@@ -6,17 +6,79 @@
 
 // console.log('Done');
 
-function getJoke(cb) {
-  //2. creating a function that takes a callback XHR
-  const req = new XMLHttpRequest(); // creating a new request object
-  req.addEventListener("load", (event) => cb(event.target.response.joke)); // adding an event listener for when the request loads
-  req.open("GET", "https://icanhazdadjoke.com/"); // opening the request
-  req.setRequestHeader("Accept", "application/json"); // setting the header to accept json
-  req.responseType = "json"; // setting the response type to json
-  req.send(); // sending the request
+// Define a function named getJoke
+function getJoke() {
+  // Create a new Promise
+  return new Promise((resolve, reject) => {
+    // Create a new XMLHttpRequest object
+    try {
+    const req = new XMLHttpRequest();
+
+    // Add an event listener for the "load" event
+    req.addEventListener("load", () => {
+      // Check if the request status is 200 (successful)
+      if (req.status === 200) {
+        // If successful, resolve the promise with the response joke
+        resolve(req.response.joke);
+      } else {
+        // If not successful, reject the promise with an error
+        reject(new Error("Failed to fetch joke"));
+      }
+    });
+
+    // Open a GET request to the URL "https://icanhazdadjoke.com/"
+    req.open("GET", "https://icanhazdadjoke.com/");
+    
+    // Set the request header to accept JSON
+    req.setRequestHeader("Accept", "application/json");
+
+    // Set the response type to JSON
+    req.responseType = "json";
+
+    // Send the request
+    req.send();
+    }
+    catch (error) {
+      reject(error);
+    }
+  });
 }
 
-//1. call getjoke and pass a callback function
-getJoke((joke) => console.log(joke)); // getting the response text
+function fetchJoke() {
+  fetch("https://icanhazdadjoke.com/", {
+    headers: {
+      Accept: "application/json",
+    }
+  })
+    .then(res => res.json())
+    .then(joke => console.log(joke));
+}
 
-console.log("Request Sent"); // getting the response text
+fetchJoke();
+// // const jokes = [];
+// // // Call the getJoke function
+// // getJoke()
+// //  .then(joke => {
+// //     jokes.push(joke);
+// //     return getJoke();
+// //  })
+// //  .then(joke => {
+// //   jokes.push(joke);
+// //   return getJoke();
+// //   })
+// //   .then(joke => {
+// //     jokes.push(joke);
+// //     console.log(jokes);
+// //   })
+
+// const jokePromises = [];
+// for (let i = 0; i < 3; i++) {
+//   jokePromises.push(getJoke());
+// }
+
+// Promise.all(jokePromises)
+//   .then((jokes) => console.log(jokes))
+//   .catch((error) => console.log(error));
+
+// // Log "Request Sent!" to the console
+console.log("Request Sent!");
