@@ -44,17 +44,18 @@ function getJoke() {
   });
 }
 
-function fetchJoke() {
-  fetch("https://icanhazdadjoke.com/", {
+async function fetchJoke() {
+  const res = await fetch("https://icanhazdadjoke.com/", {
     headers: {
       Accept: "application/json",
     }
-  })
-    .then(res => res.json())
-    .then(joke => console.log(joke));
+  });
+  const data = await res.json();
+  return data.joke;
+    // .then(joke => console.log(joke));
 }
 
-fetchJoke();
+fetchJoke().then(joke => console.log(joke));
 // // const jokes = [];
 // // // Call the getJoke function
 // // getJoke()

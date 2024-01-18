@@ -6,29 +6,31 @@ function adder(a, b) {
 }
 
 // Function adderPromise takes two parameters x and y and returns a new Promise.
-function adderPromise(x, y) {
-  return new Promise((resolve, reject) => {
-    // creating a new promise
+async function adderPromise(x, y) {
+  // creating a new promise
 
-    // Checking if x and y are numbers
-    if (typeof x === "number" && typeof y === "number") {
-      // calling the adder function to add x and y
-      const answer = adder(x, y);
-      // resolving the promise with the answer
-      resolve(answer);
-    } else {
-      // rejecting the promise with an error message
-      reject("X and Y must be numbers");
-    }
-  });
+  // Checking if x and y are numbers
+  if (typeof x === "number" && typeof y === "number") {
+    // calling the adder function to add x and y
+    const answer = adder(x, y);
+    // resolving the promise with the answer
+    return answer;
+  } else {
+    // rejecting the promise with an error message
+    throw "X and Y must be numbers";
+  }
 }
 
 // Calling the adderPromise function with arguments 10 and 20
-adderPromise(10, 20)
-  .then((value) =>
-    adderPromise(value, 100).then((answer) => console.log(answer))
-  )
-  .catch((error) => console.log(error));
+async function doStuff() {
+  const value = await adderPromise(10, 20);
+  // .then((value) =>
+  //   adderPromise(value, 100).then((answer) => console.log(answer))
+  // )
+  // .catch((error) => console.log(error));
+  console.log(value);
+}
+doStuff();
 
 adderPromise(3.14, 2.7)
   .then((value) => console.log(value))
