@@ -1,37 +1,7 @@
 import express from "express";
-import mongoose from "mongoose";
+import { EntryModel, CategoryModel } from "./db.js";
 
 const categories = ["Food", "Gaming", "Coding", "Other"]; // array of categories
-
-const entries = [
-  { category: "Food", content: "I ate some toast today" },
-  { category: "Coding", content: "I wrote some code today" },
-  { category: "Other", content: "I did something else today" },
-  { category: "Gaming", content: "I played some games today" },
-];
-
-mongoose
-  .connect(
-    // connect to MongoDB
-    ""
-  )
-  .then((m) =>
-    console.log(
-      m.connection.readyState === 1 // check if connected
-        ? "Connected to MongoDB"
-        : "Not connected to MongoDB"
-    )
-  )
-  .catch((err) => console.log(err));
-
-const entriesSchema = new mongoose.Schema({
-  category: { type: String, required: true },
-  content: { type: String, required: true },
-});
-
-const EntryModel = mongoose.model("Entry", entriesSchema);
-
-// mongoose.connect('mongodb://localhost/journal', { useNewUrlParser: true, useUnifiedTopology: true });
 
 const app = express(); // create express app
 
@@ -42,12 +12,12 @@ app.get("/", (_, res) => {
   res.send({ info: "Journal API" }); // send back a json object
 });
 
-app.get("/categories", (_, res) => res.send(categories)); // send back a json object
+app.get("/categories", async (_, res) => res.send(await CategoryModel.find())); // send back a json object
 
-app.get("/entries", (_, res) => res.send(entries)); // send back a json object
+app.get("/entries", async (_, res) => res.send(await EntryModel.find())); // send back a json object
 
-app.get("/entries/:id", (req, res) => {
-  const entry = entries[req.params.id - 1]; // get the entry from the entries array
+app.get("/entries/:id", async (req, res) => {
+  const entry = await EntryModel.findById(req.params.id);
   if (entry) {
     res.send(entry); // send back a json object
   } else {
@@ -73,7 +43,42 @@ app.post("/entries", async (req, res) => {
   }
 });
 
-app.listen(4001, () => {
-  // port 4001
-  console.log("Server is running on http://127.0.0.1:4001"); // log to console
+app.put("/entries/:id", async (req, res) => {
+  // update an entry
+  try {
+    const updatedEntry = await EntryModel.findByIdAndUpdate(
+      req.params.id,
+      req.body
+    );
+    if (updatedEntry) {
+      res.send(updatedEntry); // send back a json object
+    } else {
+      res.status(404).send({ error: "Entry not found" }); // send back a json object
+    }
+  } catch (err) {
+    // if there is an error, respond with 400 Bad Request
+    console.log(err); // log the error to the console
+    res.status(400).send({ error: err.message });
+  }
+});
+
+app.delete("/entries/:id", async (req, res) => {
+  // delete an entry
+  try {
+    const deletedEntry = await EntryModel.findByIdAndDelete(req.params.id);
+    if (deletedEntry) {
+      res.sendStatus(204); // send back a json object
+    } else {
+      res.status(404).send({ error: "Entry not found" }); // send back a json object
+    }
+  } catch (err) {
+    // if there is an error, respond with 400 Bad Request
+    console.log(err); // log the error to the console
+    res.status(400).send({ error: err.message });
+  }
+});
+
+app.listen(4002, () => {
+  // port 4002
+  console.log("Server is running on http://127.0.0.1:4002"); // log to console
 });
