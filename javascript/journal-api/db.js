@@ -14,9 +14,10 @@ try {
   console.log(err);
 }
 
-const closeConnection = () => { 
-    console.log("Mongoose Disconnected");
-    mongoose.connection.close(); }; // close the connection when the script ends
+const closeConnection = () => {
+  console.log("Mongoose Disconnected");
+  mongoose.connection.close();
+}; // close the connection when the script ends
 
 const categoriesSchema = new mongoose.Schema({
   // create a schema
@@ -25,10 +26,9 @@ const categoriesSchema = new mongoose.Schema({
 
 const CategoryModel = mongoose.model("Category", categoriesSchema); // create a model from the schema
 
-
 const entriesSchema = new mongoose.Schema({
   // create a schema
-  category: { type: String, required: true }, // define the properties
+  category: { type: mongoose.ObjectId, ref: "Category" }, // define the properties
   content: { type: String, required: true }, // define the properties
 });
 
