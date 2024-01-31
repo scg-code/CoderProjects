@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import BitcoinIndex from "./BitcoinIndex";
+import CurrencySelector from "./CurrencySelector";
 
 
 
@@ -12,5 +13,7 @@ const App = () => {
     </>
   );
 };
+
+
 
 export default App;

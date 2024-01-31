@@ -1,50 +1,37 @@
+// Importing necessary modules from React library
 import React, { useEffect, useState } from "react";
+// Importing the Pokemon component and CurrencySelector component
 import Pokemon from "./Pokemon";
+import CurrencySelector from "./CurrencySelector";
 
+// BitcoinIndex component, which displays the current Bitcoin price in a selected currency
 const BitcoinIndex = () => {
-  const [price, setPrice] = useState("");
-  const [flash, setFlash] = useState(false);
+  // State variables for the Bitcoin price ('price') and selected currency ('currency')
+  let [price, setPrice] = useState("");
+  let [currency, setCurrency] = useState("AUD");
 
-  const fetchBitcoinPrice = () => {
-    fetch("https://api.coindesk.com/v1/bpi/currentprice/AUD.json")
+  // useEffect hook to fetch the current Bitcoin price based on the selected currency
+  useEffect(() => { 
+    // Fetching data from the CoinDesk API with the selected currency
+    fetch(`https://api.coindesk.com/v1/bpi/currentprice/${currency}.json`) 
+      // Parsing the response as JSON
       .then((res) => res.json())
-      .then((data) => {
-        setPrice(data.bpi.AUD.rate);
-        setFlash(true);
-        setTimeout(() => {
-          setFlash(false);
-        }, 500);
-      });
-  };
+      // Updating the 'price' state with the fetched Bitcoin price
+      .then((data) => setPrice(data.bpi[currency].rate));
+  }, [currency]);  // useEffect dependency ensures it runs whenever 'currency' changes
 
-  useEffect(() => {
-    fetchBitcoinPrice();
-
-    const socket = new WebSocket("wss://api.coindesk.com/v1/bpi/currentprice/AUD.json");
-    socket.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      setPrice(data.bpi.AUD.rate);
-      setFlash(true);
-      setTimeout(() => {
-        setFlash(false);
-      }, 500);
-    };
-
-    // Automatically fetch Bitcoin price every 10 seconds
-    const interval = setInterval(fetchBitcoinPrice, 10000);
-
-    return () => {
-      clearInterval(interval);
-      socket.close();
-    };
-  }, []);
-
+  // Render the component with CurrencySelector and displaying the current Bitcoin price
   return (
     <>
-      <p style={{ color: flash ? "red" : "white" }}>Current Price (AUD): {price}</p>
-      <Pokemon />
+      {/* Rendering the CurrencySelector component and passing 'setCurrency' function as a prop */}
+      <CurrencySelector setCurrency={setCurrency}/>
+      {/* Displaying the current Bitcoin price and selected currency */}
+      <p>
+        Current Bitcoin Price ({currency}): {price}
+      </p>
     </>
   );
 };
 
+// Exporting the BitcoinIndex component as the default export
 export default BitcoinIndex;
