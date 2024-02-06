@@ -16,7 +16,9 @@ const Navbar = () => {
       aria-label="main navigation"
     >
       <div className="navbar-brand">
-        <h1>Journal</h1>
+        <Link to="/">
+          <h1>Journal</h1>
+        </Link>
 
         <a
           role="button"
@@ -32,13 +34,20 @@ const Navbar = () => {
         </a>
       </div>
 
-      <div id="navbarBasicExample" onClick={toggleHamburger} ref={navBarRef} className="navbar-menu">
+      <div
+        id="navbarBasicExample"
+        onClick={toggleHamburger}
+        ref={navBarRef}
+        className="navbar-menu"
+      >
         <div className="navbar-start">
-          <Link to="/"className="navbar-item">Home</Link>
+          <Link to="/" className="navbar-item">
+            Home
+          </Link>
 
-          <Link to="/category" className="navbar-item">Select Category</Link>
-
-          <Link to="/entry/new"className="navbar-item">New Entry</Link>
+          <Link to="/category" className="navbar-item">
+            Create Entry
+          </Link>
         </div>
       </div>
     </nav>
