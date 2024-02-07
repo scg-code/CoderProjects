@@ -1,24 +1,44 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Home from "./Home";
 import CategorySelection from "./CategorySelection";
 import NewEntry from "./NewEntry";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useParams } from "react-router-dom";
 import Navbar from "./Navbar";
 import ShowEntry from "./ShowEntry";
-import { useParams } from "react-router-dom";
 
 const App = () => {
-  const [categories] = useState(["Food", "Gaming", "Coding", "Other"]);
-  const [entries, setEntries] = useState([
-    { category: 0, content: "I ate a sandwich today." },
-  ]);
+  const [categories, setCategories] = useState([]);
+  const [entries, setEntries] = useState([]);
 
-  function addEntry(cat_id, content) {
+  useEffect(() => {
+    fetch("http://127.0.0.1:4002/categories")
+      .then((res) => res.json())
+      .then((data) => setCategories(data));
+
+    fetch("http://127.0.0.1:4002/entries")
+      .then((res) => res.json())
+      .then((data) => setEntries(data));
+  }, []);
+
+  async function addEntry(cat_id, content) {
+    const newId = entries.length;
     const newEntry = {
-      category: cat_id,
+      category: categories[cat_id]._id,
       content: content,
     };
-    setEntries([...entries, newEntry]);
+    // Post the new entry to the server
+    const res = await fetch("http://127.0.0.1:4002/entries", {
+      // Corrected the URL
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newEntry),
+    })
+      const data = await res.json();
+      setEntries([...entries, data]);
+
+    return newId;
   }
 
   // higher order component to pass the entry to ShowEntry component
@@ -32,7 +52,7 @@ const App = () => {
       <BrowserRouter>
         <Navbar />
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Home entries={entries} />} />
           <Route
             path="/category"
             element={<CategorySelection categories={categories} />}
@@ -47,9 +67,6 @@ const App = () => {
           <Route path="*" element={<h3>Not Found</h3>} />
         </Routes>
       </BrowserRouter>
-      {/* <Home />
-      <CategorySelection />
-      <NewEntry /> */}
     </>
   );
 };
