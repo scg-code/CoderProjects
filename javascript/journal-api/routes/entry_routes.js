@@ -17,7 +17,7 @@ router.get("/:id", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     // const cat = await CategoryModel.find0ne({ name: req.body.category });
-    const insertedEntry = await EntryModel.create(req.body);
+    const insertedEntry = await (await EntryModel.create(req.body)).populate('category');
     res.status(201).send(insertedEntry);
   } catch (err) {
     console.log(err);
