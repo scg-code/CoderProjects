@@ -11,11 +11,11 @@ const App = () => {
   const [entries, setEntries] = useState([]);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:4002/categories")
+    fetch("https://journal-api-qlr9.onrender.com/categories")
       .then((res) => res.json())
       .then((data) => setCategories(data));
 
-    fetch("http://127.0.0.1:4002/entries")
+    fetch("https://journal-api-qlr9.onrender.com/entries")
       .then((res) => res.json())
       .then((data) => setEntries(data));
   }, []);
@@ -27,16 +27,16 @@ const App = () => {
       content: content,
     };
     // Post the new entry to the server
-    const res = await fetch("http://127.0.0.1:4002/entries", {
+    const res = await fetch("https://journal-api-qlr9.onrender.com/entries", {
       // Corrected the URL
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(newEntry),
-    })
-      const data = await res.json();
-      setEntries([...entries, data]);
+    });
+    const data = await res.json();
+    setEntries([...entries, data]);
 
     return newId;
   }
